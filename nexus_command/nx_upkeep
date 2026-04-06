@@ -1,0 +1,45 @@
+#!/bin/bash
+set -euo pipefail
+
+# COLORS
+G='\033[1;32m'      # GREEN
+R='\033[1;31m'      # RED
+B='\033[0;33m'      # BLUE
+P='\033[1;35m'      # PURPLE
+O='\033[1;93m'      # ORANGE
+D='\033[0m'         # DEFAULT
+
+# THE PROJECT STAR HERE
+clear
+echo ""
+echo -e "${R}██████╗░██╗░░░██╗  ██████╗░░█████╗░░█████╗░████████╗░█████╗░██████╗░  ░██████╗░█████╗░██╗░░░░░░█████╗░"
+echo -e     "██╔══██╗╚██╗░██╔╝  ██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗██╔══██╗  ██╔════╝██╔══██╗██║░░░░░██╔══██╗"
+echo -e     "██████╦╝░╚████╔╝░  ██║░░██║██║░░██║██║░░╚═╝░░░██║░░░██║░░██║██████╔╝  ╚█████╗░██║░░██║██║░░░░░██║░░██║"
+echo -e     "██╔══██╗░░╚██╔╝░░  ██║░░██║██║░░██║██║░░██╗░░░██║░░░██║░░██║██╔══██╗  ░╚═══██╗██║░░██║██║░░░░░██║░░██║"
+echo -e     "██████╦╝░░░██║░░░  ██████╔╝╚█████╔╝╚█████╔╝░░░██║░░░╚█████╔╝██║░░██║  ██████╔╝╚█████╔╝███████╗╚█████╔╝"
+echo -e     "╚═════╝░░░░╚═╝░░░  ╚═════╝░░╚════╝░░╚════╝░░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝  ╚═════╝░░╚════╝░╚══════╝░╚════╝░${D}"
+echo ""
+
+echo -e "${P}🛠️ NEXUS BOT: ${B}Updating the pacman & AUR repository...${D}"
+    paru -Syu --noconfirm
+
+echo -e "${P}🛠️ NEXUS BOT: ${B}Updating & clear flatpaks...${D}"
+    flatpak update -y && flatpak uninstall --unused -y 2>/dev/null
+
+echo -e "${P}🛠️ NEXUS BOT: ${B}Removing orphan packages...${D}"
+    sudo pacman -Rns $(pacman -Qtdq) --noconfirm 2>/dev/null || echo -e "${P}🛠️ NEXUS BOT: ${O}Nothing to do...${D}"
+
+echo -e "${P}🛠️ NEXUS BOT: ${B}Cleaning cache...${D}"
+    sudo paccache -r -k 2>/dev/null || echo -e "${P}🛠️ NEXUS BOT: ${O}Nothing to do...${D}"
+
+echo -e "${P}🛠️ NEXUS BOT: ${B}Cleaning thumbnails & trash...${D}"
+    find ~/.cache/thumbnails -type f -atime +30 -delete 2>/dev/null || echo -e "${P}🛠️ NEXUS BOT: ${O}Nothing to do...${D}"
+    rm -rf ~/.local/share/Trash/* 2>/dev/null || echo -e "${P}🛠️ NEXUS BOT: ${O}Nothing to do...${D}"
+
+# ---- NOTIFICATION -----
+# send a notice to you when a upkeep finished...
+if command -v notify-send > dev/null; then
+    notify-send "🛠️ NEXUS BOT: Upkeep completed, you can close bash" --icon=system-software-update
+fi
+
+echo -e "${P}✅ NEXUS BOT: ${G}Upkeep completed, you can close bash${D}"
