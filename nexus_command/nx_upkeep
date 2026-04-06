@@ -27,14 +27,14 @@ echo -e "${P}🛠️ NEXUS BOT: ${B}Updating & clear flatpaks...${D}"
     flatpak update -y && flatpak uninstall --unused -y 2>/dev/null
 
 echo -e "${P}🛠️ NEXUS BOT: ${B}Removing orphan packages...${D}"
-    sudo pacman -Rns $(pacman -Qtdq) --noconfirm 2>/dev/null || echo -e "${P}🛠️ NEXUS BOT: ${O}Nothing to do...${D}"
+    sudo pacman -Rns $(pacman -Qtdq) --noconfirm 2>/dev/null || echo -e "${O}Nothing to do...${D}"
 
 echo -e "${P}🛠️ NEXUS BOT: ${B}Cleaning cache...${D}"
-    sudo paccache -r -k 2>/dev/null || echo -e "${P}🛠️ NEXUS BOT: ${O}Nothing to do...${D}"
+    sudo paccache -r -k 2>/dev/null || echo -e "${O}Nothing to do...${D}"
 
 echo -e "${P}🛠️ NEXUS BOT: ${B}Cleaning thumbnails & trash...${D}"
-    find ~/.cache/thumbnails -type f -atime +30 -delete 2>/dev/null || echo -e "${P}🛠️ NEXUS BOT: ${O}Nothing to do...${D}"
-    rm -rf ~/.local/share/Trash/* 2>/dev/null || echo -e "${P}🛠️ NEXUS BOT: ${O}Nothing to do...${D}"
+    find ~/.cache/thumbnails -type f -atime +30 -delete 2>/dev/null || echo -e "${O}Nothing to do...${D}"
+    rm -rf ~/.local/share/Trash/* 2>/dev/null || echo -e "${O}Nothing to do...${D}"
 
 # ---- NOTIFICATION -----
 # send a notice to you when a upkeep finished...

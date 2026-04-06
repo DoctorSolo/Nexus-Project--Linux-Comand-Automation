@@ -15,8 +15,7 @@ INSTALL_DIR="/usr/local/bin"
 SCRIPT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/nexus_command/${SCRIPT_NAME}"
 
 # start here
-echo -e "${P}🛠️ NEXUS BOT:"
-echo -e "   ${B}The global command ${P}$SCRIPT_NAME${B} be created in '$SCRIPT_PATH'...${D}"
+echo -e "${P}🛠️ NEXUS BOT: ${B}The global command ${P}$SCRIPT_NAME${B} be created in '$SCRIPT_PATH'...${D}"
 
 # CHECK IF COMAND EXISTE IN THIS FOULDER
 if [[ ! -f "$SCRIPT_PATH" ]]; then
