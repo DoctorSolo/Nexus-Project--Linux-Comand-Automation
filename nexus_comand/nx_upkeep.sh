@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/bash
 set -euo pipefail
 
 # COLORS
@@ -9,25 +9,27 @@ DEFAULT='\033[0m'
 
 # THE PROJECT STAR HERE
 echo -e "${RED}🛠️ NEXUS BOT: ${BLUE}Updating the pacman & AUR repository...${DEFAULT}"
-    update --noconfirm
+    paru -Syu --noconfirm
+    #update --noconfirm
 
 echo -e "${RED}🛠️ NEXUS BOT: ${BLUE}Updating & clear flatpaks...${DEFAULT}"
     flatpak update -y && flatpak uninstall --unused -y
 
 echo -e "${RED}🛠️ NEXUS BOT: ${BLUE}Removing orphan packages...${DEFAULT}"
-    sudo pacman -Rns \$(pacman -Qtdq) --noconfirm 2>/dev/null || echo "No orphans"
+    sudo pacman -Rns $(pacman -Qtdq) --noconfirm 2>/dev/null || echo "No orphans"
 
 echo -e "${RED}🛠️ NEXUS BOT: ${BLUE}Cleaning cache...${DEFAULT}"
-    sudo paccache -r -k 2
+    sudo paccache -r -k 2>/dev/null || true
 
 echo -e "${RED}🛠️ NEXUS BOT: ${BLUE}Cleaning thumbnails & trash...${DEFAULT}"
-    find ~/.cache/thumbnails -type f -atime +30 -delete 2>/dev/null
-    rm -rf ~/.local/share/Trash/* 2>/dev/null
+    find ~/.cache/thumbnails -type f -atime +30 -delete 2>/dev/null || true
+    rm -rf ~/.local/share/Trash/* 2>/dev/null || true
 
 # ---- NOTIFICATION -----
 # send a notice to you when a upkeep finished...
 if command -v notify-send > dev/null; then
     notify-send "🛠️ NEXUS BOT: Upkeep completed, you can close bash" --icon=system-software-update
+fi
 
 clear
 echo -e "${RED}██████╗░██╗░░░██╗  ██████╗░░█████╗░░█████╗░████████╗░█████╗░██████╗░  ░██████╗░█████╗░██╗░░░░░░█████╗░"
