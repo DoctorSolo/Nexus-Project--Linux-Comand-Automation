@@ -1,0 +1,29 @@
+#!/bin/bash
+
+for cmd in yt-dlp ffmpeg aria2c; do
+    if ! command -v $cmd &> /dev/null; then
+        echo "Error: $cmd not found. Install it: sudo pacman -S yt-dlp ffmpeg aria2"
+        exit 1
+    fi
+done
+
+# link here
+read -p "Put here the link: " URL
+
+if [ -z "$URL" ]; then
+    echo "Link empity"
+    exit 1
+fi
+
+echo "Start the downloading..."
+
+yt-dlp \
+    -f "bestvideo+bestaudio/best" \
+    --merge-output-format mp4 \
+    --downloader aria2c \
+    --downloader-args "aria2c:-x 8 -s 8 -j 8 -k 1M" \
+    --postprocessor-args "ffmpeg: -c:v libx264 -crf 18 -c:a aac" \
+    -o "~/Downloads/%(title)s.%(ext)s" \
+    "$URL"
+
+echo "Download completed in ~/Downloads"
